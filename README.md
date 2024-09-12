@@ -1,1 +1,2 @@
 # terraform-aws-security_gr
+DONT RUN TERRAFORM INIT PLAN OR APPLY IN THIS REPO
