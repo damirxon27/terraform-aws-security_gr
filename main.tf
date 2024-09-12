@@ -3,6 +3,7 @@ resource "aws_security_group" "default" {
   name        = each.key
   description = each.value.description
   vpc_id      = var.vpc_id
+ 
   dynamic "ingress" {
     for_each = each.value.ingress_rules != null ? each.value.ingress_rules : []
     content {
@@ -16,6 +17,7 @@ resource "aws_security_group" "default" {
   }
   dynamic "egress" {
     for_each = each.value.egress_rules != null ? each.value.egress_rules : []
+ 
     content {
       description = egress.value.description
       from_port   = egress.value.from_port
@@ -25,13 +27,16 @@ resource "aws_security_group" "default" {
       security_groups = egress.value.security_groups != null ? egress.value.security_groups : null
     }
   }
+ 
   tags = {
     Name = join("-", ["security-group", each.key])
   }
 }
+ 
 variable "vpc_id" {
   type = string
 }
+ 
 variable "security_groups" {
   description = "A map of security groups with their rules"
   type = map(object({
@@ -57,7 +62,4 @@ variable "security_groups" {
 }
 output "my-security_gr_id" {
 value = {for k, v in aws_security_group.default: k => v.id}
-}
-output "security_group_id" {
-  value = aws_security_group.your_sg.id
 }
